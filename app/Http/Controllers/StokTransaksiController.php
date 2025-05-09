@@ -34,17 +34,17 @@ class StokTransaksiController extends Controller
 
         // Hitung total harga
         $total = $request->jumlah * $request->harga;
-        
+
         DB::beginTransaction();
         try {
             // Buat transaksi
             $transaksi = new StokTransaksi($request->all());
             $transaksi->total = $total;
             $transaksi->save();
-            
+
             // Update stok barang
             $barang = Barang::findOrFail($request->barang_id);
-            
+
             if ($request->tipe == 'masuk') {
                 $barang->stok_sekarang += $request->jumlah;
             } else {
@@ -54,13 +54,13 @@ class StokTransaksiController extends Controller
                 }
                 $barang->stok_sekarang -= $request->jumlah;
             }
-            
+
             $barang->save();
-            
+
             DB::commit();
             return redirect()->route('stok-transaksi.index')
                 ->with('success', 'Transaksi stok berhasil dicatat');
-                
+
         } catch (\Exception $e) {
             DB::rollback();
             return redirect()->back()

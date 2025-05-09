@@ -34,6 +34,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/laporan/stok-harian', [LaporanController::class, 'stokHarian'])->name('laporan.stok-harian');
     Route::get('/laporan/stok-bulanan', [LaporanController::class, 'stokBulanan'])->name('laporan.stok-bulanan');
     Route::get('/laporan/stok-barang', [LaporanController::class, 'stokBarang'])->name('laporan.stok-barang');
+
+
 });
 
 require __DIR__.'/auth.php';
