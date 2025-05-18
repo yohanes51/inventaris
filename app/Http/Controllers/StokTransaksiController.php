@@ -12,13 +12,13 @@ class StokTransaksiController extends Controller
     public function index()
     {
         $transaksis = StokTransaksi::with('barang')->orderBy('tanggal_transaksi', 'desc')->get();
-        return view('stok_transaksi.index', compact('transaksis'));
+        return view('stok-transaksi.index', compact('transaksis'));
     }
 
     public function create()
     {
         $barangs = Barang::all();
-        return view('stok_transaksi.create', compact('barangs'));
+        return view('stok-transaksi.create', compact('barangs'));
     }
 
     public function store(Request $request)
