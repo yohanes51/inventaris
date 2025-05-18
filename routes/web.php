@@ -28,6 +28,9 @@ Route::middleware('auth')->group(function () {
 
     // Stok Transaksi Routes
     Route::resource('stok-transaksi', StokTransaksiController::class);
+    Route::get('/stok-transaksi/create/masuk', [StokTransaksiController::class, 'create'])->name('stok-transaksi.create.masuk');
+    Route::get('/stok-transaksi/create/keluar', [StokTransaksiController::class, 'create'])->name('stok-transaksi.create.keluar');
+
 
     // Laporan Routes
     Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
