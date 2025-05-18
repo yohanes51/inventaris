@@ -49,7 +49,7 @@
 
                             <!-- Stok Minimum -->
                             <div>
-                                <label for="stok_minimum" class="block text-sm font-medium text-gray-700 mb-1">Stok Minimum</label>
+                                <label for="stok_minimum" class="block text-sm font-medium text-gray-700 mb-1">Stok Minimum / yrd</label>
                                 <input type="number" name="stok_minimum" id="stok_minimum" value="{{ old('stok_minimum', 0) }}" min="0" class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" required>
                                 @error('stok_minimum')
                                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
