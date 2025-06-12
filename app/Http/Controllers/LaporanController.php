@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 class LaporanController extends Controller
 {
     //
-}
+
     public function index()
     {
         return view('laporan.index');
