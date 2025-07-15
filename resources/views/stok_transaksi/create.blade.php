@@ -50,19 +50,6 @@
                         </div>
                         
                         <div class="mb-4">
-                            <label for="harga" class="block text-sm font-medium text-gray-700">Harga per Unit (Rp)</label>
-                            <input type="number" id="harga" name="harga" value="{{ old('harga') }}" min="0" step="0.01" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
-                            @error('harga')
-                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <div class="mb-4">
-                            <label class="block text-sm font-medium text-gray-700">Total Harga (Rp)</label>
-                            <div id="total-harga" class="mt-1 py-2 px-3 bg-gray-100 rounded-md font-medium">0</div>
-                        </div>
-                        
-                        <div class="mb-4">
                             <label for="tanggal_transaksi" class="block text-sm font-medium text-gray-700">Tanggal Transaksi</label>
                             <input type="date" id="tanggal_transaksi" name="tanggal_transaksi" value="{{ old('tanggal_transaksi', date('Y-m-d')) }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
                             @error('tanggal_transaksi')
@@ -96,8 +83,6 @@
         document.addEventListener('DOMContentLoaded', function() {
             const barangSelect = document.getElementById('barang_id');
             const jumlahInput = document.getElementById('jumlah');
-            const hargaInput = document.getElementById('harga');
-            const totalHarga = document.getElementById('total-harga');
             const submitBtn = document.getElementById('submit-btn');
             
             const tipeTrans = "{{ request('tipe', 'masuk') }}";
@@ -114,14 +99,6 @@
                         stokDisplay.textContent = '0';
                     }
                 }
-            }
-            
-            function updateTotalHarga() {
-                const jumlah = parseInt(jumlahInput.value) || 0;
-                const harga = parseFloat(hargaInput.value) || 0;
-                const total = jumlah * harga;
-                
-                totalHarga.textContent = new Intl.NumberFormat('id-ID').format(total);
             }
             
             function validateStokKeluar() {
@@ -141,8 +118,6 @@
             }
             
             barangSelect.addEventListener('change', updateStokTersedia);
-            jumlahInput.addEventListener('input', updateTotalHarga);
-            hargaInput.addEventListener('input', updateTotalHarga);
             
             const form = document.querySelector('form');
             form.addEventListener('submit', function(event) {
@@ -153,7 +128,6 @@
             
             // Initialize
             updateStokTersedia();
-            updateTotalHarga();
         });
     </script>
 </x-app-layout>
