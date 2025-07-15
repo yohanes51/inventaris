@@ -40,11 +40,11 @@
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                         <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
                             <h3 class="text-lg font-medium text-blue-800">Total Barang Masuk</h3>
-                            <p class="text-2xl font-bold">Rp {{ number_format($summary['total_masuk'], 0, ',', '.') }}</p>
+                            <p class="text-2xl font-bold">{{ number_format($summary['total_masuk'], 0, ',', '.') }} yard</p>
                         </div>
                         <div class="bg-red-50 p-4 rounded-lg border border-red-100">
                             <h3 class="text-lg font-medium text-red-800">Total Barang Keluar</h3>
-                            <p class="text-2xl font-bold">Rp {{ number_format($summary['total_keluar'], 0, ',', '.') }}</p>
+                            <p class="text-2xl font-bold">{{ number_format($summary['total_keluar'], 0, ',', '.') }} yard</p>
                         </div>
                         <div class="bg-gray-50 p-4 rounded-lg border border-gray-100">
                             <h3 class="text-lg font-medium text-gray-800">Jumlah Transaksi</h3>
@@ -64,8 +64,6 @@
                                     <th class="py-3 px-4 border-b text-left">Nama Barang</th>
                                     <th class="py-3 px-4 border-b text-left">Tipe</th>
                                     <th class="py-3 px-4 border-b text-left">Jumlah</th>
-                                    <th class="py-3 px-4 border-b text-left">Harga</th>
-                                    <th class="py-3 px-4 border-b text-left">Total</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -80,9 +78,7 @@
                                             {{ ucfirst($transaksi->tipe) }}
                                         </span>
                                     </td>
-                                    <td class="py-2 px-4 border-b">{{ $transaksi->jumlah }}</td>
-                                    <td class="py-2 px-4 border-b">Rp {{ number_format($transaksi->harga, 0, ',', '.') }}</td>
-                                    <td class="py-2 px-4 border-b">Rp {{ number_format($transaksi->total, 0, ',', '.') }}</td>
+                                    <td class="py-2 px-4 border-b">{{ number_format($transaksi->jumlah, 0, ',', '.') }}</td>
                                 </tr>
                                 @endforeach
                             </tbody>
