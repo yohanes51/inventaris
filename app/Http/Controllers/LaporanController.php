@@ -29,8 +29,8 @@ class LaporanController extends Controller
             ->get();
             
         $summary = [
-            'total_masuk' => $transaksis->where('tipe', 'masuk')->sum('total'),
-            'total_keluar' => $transaksis->where('tipe', 'keluar')->sum('total'),
+            'total_masuk' => $transaksis->where('tipe', 'masuk')->sum('jumlah'),
+            'total_keluar' => $transaksis->where('tipe', 'keluar')->sum('jumlah'),
             'jumlah_transaksi' => $transaksis->count(),
         ];
         
@@ -53,8 +53,7 @@ class LaporanController extends Controller
                 DB::raw('DATE(tanggal_transaksi) as tanggal'),
                 DB::raw('SUM(CASE WHEN tipe = "masuk" THEN jumlah ELSE 0 END) as total_masuk'),
                 DB::raw('SUM(CASE WHEN tipe = "keluar" THEN jumlah ELSE 0 END) as total_keluar'),
-                DB::raw('SUM(CASE WHEN tipe = "masuk" THEN total ELSE 0 END) as nilai_masuk'),
-                DB::raw('SUM(CASE WHEN tipe = "keluar" THEN total ELSE 0 END) as nilai_keluar')
+                DB::raw('COUNT(*) as jumlah_transaksi')
             )
             ->whereYear('tanggal_transaksi', $tahun)
             ->whereMonth('tanggal_transaksi', $bulanNum)
@@ -63,8 +62,8 @@ class LaporanController extends Controller
             ->get();
             
         $summary = [
-            'total_masuk' => $transaksis->sum('nilai_masuk'),
-            'total_keluar' => $transaksis->sum('nilai_keluar'),
+            'total_masuk' => $transaksis->sum('total_masuk'),
+            'total_keluar' => $transaksis->sum('total_keluar'),
             'jumlah_hari' => $transaksis->count(),
         ];
         

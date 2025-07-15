@@ -40,11 +40,11 @@
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                         <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
                             <h3 class="text-lg font-medium text-blue-800">Total Barang Masuk</h3>
-                            <p class="text-2xl font-bold">Rp {{ number_format($summary['total_masuk'], 0, ',', '.') }}</p>
+                            <p class="text-2xl font-bold"> {{ number_format($summary['total_masuk'], 0, ',', '.') }} yard</p>
                         </div>
                         <div class="bg-red-50 p-4 rounded-lg border border-red-100">
                             <h3 class="text-lg font-medium text-red-800">Total Barang Keluar</h3>
-                            <p class="text-2xl font-bold">Rp {{ number_format($summary['total_keluar'], 0, ',', '.') }}</p>
+                            <p class="text-2xl font-bold"> {{ number_format($summary['total_keluar'], 0, ',', '.') }} yard</p>
                         </div>
                         <div class="bg-gray-50 p-4 rounded-lg border border-gray-100">
                             <h3 class="text-lg font-medium text-gray-800">Jumlah Hari Dengan Transaksi</h3>
@@ -73,9 +73,7 @@
                                     <td class="py-2 px-4 border-b">{{ $index + 1 }}</td>
                                     <td class="py-2 px-4 border-b">{{ date('d F Y', strtotime($transaksi->tanggal)) }}</td>
                                     <td class="py-2 px-4 border-b">{{ $transaksi->total_masuk }}</td>
-                                    <td class="py-2 px-4 border-b">Rp {{ number_format($transaksi->nilai_masuk, 0, ',', '.') }}</td>
                                     <td class="py-2 px-4 border-b">{{ $transaksi->total_keluar }}</td>
-                                    <td class="py-2 px-4 border-b">Rp {{ number_format($transaksi->nilai_keluar, 0, ',', '.') }}</td>
                                     <td class="py-2 px-4 border-b print:hidden">
                                         <a href="{{ route('laporan.stok-harian', ['tanggal' => $transaksi->tanggal]) }}" class="text-blue-500 hover:text-blue-700">
                                             Lihat Detail
