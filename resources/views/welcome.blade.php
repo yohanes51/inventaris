@@ -3,11 +3,11 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>HASA - Welcome</title>
+        <title>HASA</title>
         <script src="https://cdn.tailwindcss.com"></script>
         <style>
             body {
-                background-image: url('assets/bg1.png');
+                background-image: url('assets/bg2.png');
                 background-size: cover;
                 background-position: center;
                 background-repeat: no-repeat;
