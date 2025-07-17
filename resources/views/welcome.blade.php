@@ -31,7 +31,7 @@
         <header class="fixed top-4 right-4 z-50 w-auto text-sm not-has-[nav]:hidden">
             @if (Route::has('login'))
                 <nav class="flex items-center justify-end gap-4">
-                    @auth
+                    @auth('web')
                         <a
                             href="{{ url('/dashboard') }}"
                             class="px-5 py-2 text-white bg-slate-700 hover:bg-slate-600 border border-slate-600 hover:border-slate-500 rounded-lg transition-all duration-200 shadow-lg"
@@ -51,6 +51,30 @@
                                 href="{{ route('register') }}"
                                 class="px-5 py-2 text-white bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-slate-600 rounded-lg transition-all duration-200 shadow-lg">
                                 Register
+                            </a>
+                        @endif
+                    @endauth
+
+                    @auth('admin')
+                        <a
+                            href="{{ url('/admin/dashboard') }}"
+                            class="px-5 py-2 text-white bg-slate-700 hover:bg-slate-600 border border-slate-600 hover:border-slate-500 rounded-lg transition-all duration-200 shadow-lg"
+                        >
+                            Admin Dashboard
+                        </a>
+                    @else
+                        <a
+                            href="{{ route('admin.login') }}"
+                            class="px-5 py-2 text-white bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-slate-600 rounded-lg transition-all duration-200 shadow-lg"
+                        >
+                            Admin Log in
+                        </a>
+
+                        @if (Route::has('admin.register'))
+                            <a
+                                href="{{ route('admin.register') }}"
+                                class="px-5 py-2 text-white bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-slate-600 rounded-lg transition-all duration-200 shadow-lg">
+                                Admin Register
                             </a>
                         @endif
                     @endauth
