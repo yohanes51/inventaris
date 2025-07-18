@@ -32,7 +32,7 @@ class BarangController extends Controller
         ]);
 
         Barang::create($request->all());
-        return redirect()->route('barang.index')
+        return redirect()->route('admin.barang.index')
             ->with('success', 'Barang berhasil ditambahkan');
     }
 
