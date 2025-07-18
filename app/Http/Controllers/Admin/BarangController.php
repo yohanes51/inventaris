@@ -11,13 +11,13 @@ class BarangController extends Controller
     public function index()
     {
         $barangs = Barang::with('kategori')->get();
-        return view('barang.index', compact('barangs'));
+        return view('admin.barang.index', compact('barangs'));
     }
 
     public function create()
     {
         $kategoris = Kategori::all();
-        return view('barang.create', compact('kategoris'));
+        return view('admin.barang.create', compact('kategoris'));
     }
 
     public function store(Request $request)
@@ -38,13 +38,13 @@ class BarangController extends Controller
 
     public function show(Barang $barang)
     {
-        return view('barang.show', compact('barang'));
+        return view('admin.barang.show', compact('barang'));
     }
 
     public function edit(Barang $barang)
     {
         $kategoris = Kategori::all();
-        return view('barang.edit', compact('barang', 'kategoris'));
+        return view('admin.barang.edit', compact('barang', 'kategoris'));
     }
 
     public function update(Request $request, Barang $barang)
@@ -59,7 +59,7 @@ class BarangController extends Controller
         ]);
 
         $barang->update($request->all());
-        return redirect()->route('barang.index')
+        return redirect()->route('admin.barang.index')
             ->with('success', 'Barang berhasil diperbarui');
     }
 
@@ -67,12 +67,12 @@ class BarangController extends Controller
     {
         // Periksa apakah ada transaksi terkait barang ini
         if ($barang->stokTransaksis()->count() > 0) {
-            return redirect()->route('barang.index')
+            return redirect()->route('admin.barang.index')
                 ->with('error', 'Barang tidak dapat dihapus karena memiliki transaksi stok');
         }
 
         $barang->delete();
-        return redirect()->route('barang.index')
+        return redirect()->route('admin.barang.index')
             ->with('success', 'Barang berhasil dihapus');
     }
 }

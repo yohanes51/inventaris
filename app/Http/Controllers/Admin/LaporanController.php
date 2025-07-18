@@ -11,7 +11,7 @@ class LaporanController extends Controller
 {
     public function index()
     {
-        return view('laporan.index');
+        return view('admin.laporan.index');
     }
 
     public function stokHarian(Request $request)
@@ -33,7 +33,7 @@ class LaporanController extends Controller
             'jumlah_transaksi' => $transaksis->count(),
         ];
         
-        return view('laporan.stok_harian', compact('transaksis', 'tanggal', 'summary'));
+        return view('admin.laporan.stok_harian', compact('transaksis', 'tanggal', 'summary'));
     }
 
     public function stokBulanan(Request $request)
@@ -67,7 +67,7 @@ class LaporanController extends Controller
             'jumlah_hari' => $transaksis->count(),
         ];
         
-        return view('laporan.stok_bulanan', compact('transaksis', 'bulan', 'summary'));
+        return view('admin.laporan.stok_bulanan', compact('transaksis', 'bulan', 'summary'));
     }
 
     public function stokBarang()
@@ -78,6 +78,6 @@ class LaporanController extends Controller
             return $item->stok_sekarang <= $item->stok_minimum;
         });
         
-        return view('laporan.stok_barang', compact('barangs', 'stokKritis'));
+        return view('admin.laporan.stok_barang', compact('barangs', 'stokKritis'));
     }
 }

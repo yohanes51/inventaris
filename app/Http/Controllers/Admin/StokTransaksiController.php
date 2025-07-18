@@ -12,13 +12,13 @@ class StokTransaksiController extends Controller
     public function index()
     {
         $transaksis = StokTransaksi::with('barang')->orderBy('tanggal_transaksi', 'desc')->get();
-        return view('stok_transaksi.index', compact('transaksis'));
+        return view('admin.stok_transaksi.index', compact('transaksis'));
     }
 
     public function create()
     {
         $barangs = Barang::all();
-        return view('stok_transaksi.create', compact('barangs'));
+        return view('admin.stok_transaksi.create', compact('barangs'));
     }
 
     public function store(Request $request)
@@ -58,7 +58,7 @@ class StokTransaksiController extends Controller
             $barang->save();
 
             DB::commit();
-            return redirect()->route('stok-transaksi.index')
+            return redirect()->route('admin.stok-transaksi.index')
                 ->with('success', 'Transaksi stok berhasil dicatat');
 
         } catch (\Exception $e) {
@@ -71,14 +71,14 @@ class StokTransaksiController extends Controller
 
     public function show(StokTransaksi $stokTransaksi)
     {
-        return view('stok_transaksi.show', compact('stokTransaksi'));
+        return view('admin.stok_transaksi.show', compact('stokTransaksi'));
     }
 
     public function destroy(StokTransaksi $stokTransaksi)
     {
         // Tidak direkomendasikan menghapus transaksi stok
         // Jika ingin menghapus, harus dikembalikan juga stok barangnya
-        return redirect()->route('stok-transaksi.index')
+        return redirect()->route('admin.stok-transaksi.index')
             ->with('error', 'Penghapusan transaksi stok tidak diizinkan');
     }
 }

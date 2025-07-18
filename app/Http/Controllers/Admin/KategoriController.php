@@ -10,12 +10,12 @@ class KategoriController extends Controller
     public function index()
     {
         $kategoris = Kategori::all();
-        return view('kategori.index', compact('kategoris'));
+        return view('admin.kategori.index', compact('kategoris'));
     }
 
     public function create()
     {
-        return view('kategori.create');
+        return view('admin.kategori.create');
     }
 
     public function store(Request $request)
@@ -26,18 +26,18 @@ class KategoriController extends Controller
         ]);
 
         Kategori::create($request->all());
-        return redirect()->route('kategori.index')
+        return redirect()->route('admin.kategori.index')
             ->with('success', 'Kategori berhasil ditambahkan');
     }
 
     public function show(Kategori $kategori)
     {
-        return view('kategori.show', compact('kategori'));
+        return view('admin.kategori.show', compact('kategori'));
     }
 
     public function edit(Kategori $kategori)
     {
-        return view('kategori.edit', compact('kategori'));
+        return view('admin.kategori.edit', compact('kategori'));
     }
 
     public function update(Request $request, Kategori $kategori)
@@ -48,7 +48,7 @@ class KategoriController extends Controller
         ]);
 
         $kategori->update($request->all());
-        return redirect()->route('kategori.index')
+        return redirect()->route('admin.kategori.index')
             ->with('success', 'Kategori berhasil diperbarui');
     }
 
@@ -56,12 +56,12 @@ class KategoriController extends Controller
     {
         // Periksa apakah ada barang dengan kategori ini
         if ($kategori->barangs()->count() > 0) {
-            return redirect()->route('kategori.index')
+            return redirect()->route('admin.kategori.index')
                 ->with('error', 'Kategori tidak dapat dihapus karena masih memiliki barang');
         }
 
         $kategori->delete();
-        return redirect()->route('kategori.index')
+        return redirect()->route('admin.kategori.index')
             ->with('success', 'Kategori berhasil dihapus');
     }
 }
