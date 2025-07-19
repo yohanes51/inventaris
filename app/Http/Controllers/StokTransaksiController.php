@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use App\Models\Barang;
 use App\Models\StokTransaksi;
 use Illuminate\Http\Request;
@@ -11,7 +12,12 @@ class StokTransaksiController extends Controller
 {
     public function index()
     {
-        $transaksis = StokTransaksi::with('barang')->orderBy('tanggal_transaksi', 'desc')->get();
+        // Hanya menampilkan transaksi keluar
+        $transaksis = StokTransaksi::with('barang')
+            ->where('tipe', 'keluar')
+            ->orderBy('tanggal_transaksi', 'desc')
+            ->get();
+
         return view('stok_transaksi.index', compact('transaksis'));
     }
 
@@ -25,44 +31,45 @@ class StokTransaksiController extends Controller
     {
         $request->validate([
             'barang_id' => 'required|exists:barangs,id',
-            'tipe' => 'required|in:masuk,keluar',
             'jumlah' => 'required|integer|min:1',
-            'harga' => 'required|numeric|min:0',
             'tanggal_transaksi' => 'required|date',
-            'keterangan' => 'nullable',
+            'keterangan' => 'nullable|string|max:255',
         ]);
 
-        // Hitung total harga
-        $total = $request->jumlah * $request->harga;
-
         DB::beginTransaction();
-        try {
-            // Buat transaksi
-            $transaksi = new StokTransaksi($request->all());
-            $transaksi->total = $total;
-            $transaksi->save();
 
-            // Update stok barang
+        try {
             $barang = Barang::findOrFail($request->barang_id);
 
-            if ($request->tipe == 'masuk') {
-                $barang->stok_sekarang += $request->jumlah;
-            } else {
-                // Validasi stok keluar
-                if ($barang->stok_sekarang < $request->jumlah) {
-                    throw new \Exception('Stok tidak mencukupi untuk transaksi keluar.');
-                }
-                $barang->stok_sekarang -= $request->jumlah;
+            if ($barang->stok_sekarang < $request->jumlah) {
+                throw new \Exception('Stok tidak mencukupi untuk transaksi keluar.');
             }
 
+            $harga = $barang->harga_jual;
+            $total = $harga * $request->jumlah;
+
+            $transaksi = new StokTransaksi([
+                'barang_id' => $barang->id,
+                'tipe' => 'keluar', // Tetap dan tidak bisa diubah
+                'jumlah' => $request->jumlah,
+                'tanggal_transaksi' => $request->tanggal_transaksi,
+                'keterangan' => $request->keterangan,
+                'harga' => $harga,
+                'total' => $total,
+            ]);
+            $transaksi->save();
+
+            // Kurangi stok
+            $barang->stok_sekarang -= $request->jumlah;
             $barang->save();
 
             DB::commit();
-            return redirect()->route('admin.stok-transaksi.index')
-                ->with('success', 'Transaksi stok berhasil dicatat');
+
+            return redirect()->route('stok-transaksi.index')
+                ->with('success', 'Transaksi keluar berhasil dicatat');
 
         } catch (\Exception $e) {
-            DB::rollback();
+            DB::rollBack();
             return redirect()->back()
                 ->with('error', $e->getMessage())
                 ->withInput();
@@ -71,14 +78,18 @@ class StokTransaksiController extends Controller
 
     public function show(StokTransaksi $stokTransaksi)
     {
+        // Batasi hanya transaksi keluar yang bisa dilihat user
+        if ($stokTransaksi->tipe !== 'keluar') {
+            abort(403, 'Akses ditolak.');
+        }
+
         return view('stok_transaksi.show', compact('stokTransaksi'));
     }
 
     public function destroy(StokTransaksi $stokTransaksi)
     {
-        // Tidak direkomendasikan menghapus transaksi stok
-        // Jika ingin menghapus, harus dikembalikan juga stok barangnya
+        // User tidak bisa menghapus transaksi
         return redirect()->route('stok-transaksi.index')
-            ->with('error', 'Penghapusan transaksi stok tidak diizinkan');
+            ->with('error', 'Penghapusan transaksi tidak diizinkan');
     }
 }
