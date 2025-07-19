@@ -51,7 +51,7 @@
                                         <td class="py-3 px-4">{{ $index + 1 }}</td>
                                         <td class="py-3 px-4">{{ $barang->kode_barang }}</td>
                                         <td class="py-3 px-4">{{ $barang->nama_barang }}</td>
-                                        <td class="py-3 px-4">{{ $barang->kategori->nama ?? '-' }}</td>
+                                        <td class="py-3 px-4">{{ $barang->kategori->nama_kategori }}</td>
                                         <td class="py-3 px-4 text-right">
                                             <span class="{{ $barang->stok_sekarang <= $barang->stok_minimum ? 'text-red-600 font-bold' : '' }}">
                                                 {{ number_format($barang->stok_sekarang) }}
