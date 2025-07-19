@@ -58,7 +58,7 @@ class StokTransaksiController extends Controller
             $barang->save();
 
             DB::commit();
-            return redirect()->route('stok-transaksi.index')
+            return redirect()->route('admin.stok-transaksi.index')
                 ->with('success', 'Transaksi stok berhasil dicatat');
 
         } catch (\Exception $e) {

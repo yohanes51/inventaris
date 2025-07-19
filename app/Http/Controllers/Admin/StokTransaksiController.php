@@ -11,8 +11,9 @@ class StokTransaksiController extends Controller
 {
     public function index()
     {
-        $transaksis = StokTransaksi::with('barang')->orderBy('tanggal_transaksi', 'desc')->get();
+        $transaksis = StokTransaksi::with('barang.kategori')->orderBy('tanggal_transaksi', 'desc')->get();
         return view('admin.stok_transaksi.index', compact('transaksis'));
+        
     }
 
     public function create()
@@ -27,34 +28,39 @@ class StokTransaksiController extends Controller
             'barang_id' => 'required|exists:barangs,id',
             'tipe' => 'required|in:masuk,keluar',
             'jumlah' => 'required|integer|min:1',
-            'harga' => 'required|numeric|min:0',
             'tanggal_transaksi' => 'required|date',
             'keterangan' => 'nullable',
         ]);
 
-        // Hitung total harga
-        $total = $request->jumlah * $request->harga;
-
         DB::beginTransaction();
         try {
-            // Buat transaksi
-            $transaksi = new StokTransaksi($request->all());
-            $transaksi->total = $total;
-            $transaksi->save();
-
-            // Update stok barang
             $barang = Barang::findOrFail($request->barang_id);
 
+            // Ambil harga otomatis berdasarkan tipe
+            $harga = $request->tipe == 'masuk' ? $barang->harga_beli : $barang->harga_jual;
+            $total = $harga * $request->jumlah;
+
+            // Buat transaksi
+            $transaksi = new StokTransaksi([
+                'barang_id' => $barang->id,
+                'tipe' => $request->tipe,
+                'jumlah' => $request->jumlah,
+                'tanggal_transaksi' => $request->tanggal_transaksi,
+                'keterangan' => $request->keterangan,
+                'harga' => $harga,
+                'total' => $total,
+            ]);
+            $transaksi->save();
+
+            // Update stok
             if ($request->tipe == 'masuk') {
                 $barang->stok_sekarang += $request->jumlah;
             } else {
-                // Validasi stok keluar
                 if ($barang->stok_sekarang < $request->jumlah) {
                     throw new \Exception('Stok tidak mencukupi untuk transaksi keluar.');
                 }
                 $barang->stok_sekarang -= $request->jumlah;
             }
-
             $barang->save();
 
             DB::commit();
