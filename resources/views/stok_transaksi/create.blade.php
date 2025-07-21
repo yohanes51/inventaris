@@ -1,7 +1,7 @@
-<x-admin-app-layout>
+<x--app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ request('tipe') == 'masuk' ? 'Tambah Stok Masuk' : 'Tambah Stok Keluar' }}
+            Tambah Stok Keluar
         </h2>
     </x-slot>
 
@@ -15,19 +15,17 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ route('admin.stok-transaksi.store') }}">
+                    <form method="POST" action="{{ route('stok-transaksi.store') }}">
                         @csrf
-                        
-                        <input type="hidden" name="tipe" value="{{ request('tipe', 'masuk') }}">
-                        
+
                         <div class="mb-4">
                             <label for="barang_id" class="block text-sm font-medium text-gray-700 mb-1">Barang</label>
                             <select name="barang_id" id="barang_id" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md" required>
                                 <option value="">-- Pilih Barang --</option>
                                 @foreach ($barangs as $barang)
                                     <option value="{{ $barang->id }}"
-                                        data-harga-beli="{{ $barang->harga_beli }}"
                                         data-harga-jual="{{ $barang->harga_jual }}"
+                                        data-stok="{{ $barang->stok_sekarang }}"
                                         {{ old('barang_id') == $barang->id ? 'selected' : '' }}>
                                         {{ $barang->nama_barang }}
                                     </option>
@@ -38,14 +36,12 @@
                             @enderror
                         </div>
 
-                        @if(request('tipe') == 'keluar')
-                            <div class="mb-4">
-                                <div class="p-3 bg-yellow-50 text-yellow-800 border border-yellow-300 rounded-md">
-                                    <p class="text-sm font-medium">Stok tersedia: <span id="stok-tersedia">0</span></p>
-                                </div>
+                        <div class="mb-4">
+                            <div class="p-3 bg-yellow-50 text-yellow-800 border border-yellow-300 rounded-md">
+                                <p class="text-sm font-medium">Stok tersedia: <span id="stok-tersedia">0</span></p>
                             </div>
-                        @endif
-                        
+                        </div>
+
                         <div class="mb-4">
                             <label for="jumlah" class="block text-sm font-medium text-gray-700">Jumlah</label>
                             <input type="number" id="jumlah" name="jumlah" value="{{ old('jumlah') }}" min="1" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
@@ -53,7 +49,7 @@
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror
                         </div>
-                        
+
                         <div class="mb-4">
                             <label for="harga" class="block text-sm font-medium text-gray-700">Harga per Unit (Rp)</label>
                             <div id="harga-display" class="mt-1 py-2 px-3 bg-gray-100 rounded-md font-medium">0</div>
@@ -67,7 +63,7 @@
                             <label class="block text-sm font-medium text-gray-700">Total Harga (Rp)</label>
                             <div id="total-harga" class="mt-1 py-2 px-3 bg-gray-100 rounded-md font-medium">0</div>
                         </div>
-                        
+
                         <div class="mb-4">
                             <label for="tanggal_transaksi" class="block text-sm font-medium text-gray-700">Tanggal Transaksi</label>
                             <input type="date" id="tanggal_transaksi" name="tanggal_transaksi" value="{{ old('tanggal_transaksi', date('Y-m-d')) }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
@@ -75,7 +71,7 @@
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror
                         </div>
-                        
+
                         <div class="mb-4">
                             <label for="keterangan" class="block text-sm font-medium text-gray-700">Keterangan (Opsional)</label>
                             <textarea id="keterangan" name="keterangan" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">{{ old('keterangan') }}</textarea>
@@ -83,13 +79,13 @@
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             @enderror
                         </div>
-                        
+
                         <div class="flex items-center justify-between mt-6">
-                            <a href="{{ route('admin.stok-transaksi.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest hover:bg-gray-300 active:bg-gray-400 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">
+                            <a href="{{ route('dashboard') }}" class="inline-flex items-center px-4 py-2 bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest hover:bg-gray-300 active:bg-gray-400 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">
                                 Kembali
                             </a>
                             <button type="submit" id="submit-btn" class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:border-indigo-900 focus:ring ring-indigo-300 disabled:opacity-25 transition ease-in-out duration-150">
-                                Simpan
+                                Checkout
                             </button>
                         </div>
                     </form>
@@ -99,40 +95,32 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const barangSelect = document.getElementById('barang_id');
             const jumlahInput = document.getElementById('jumlah');
             const hargaInput = document.getElementById('harga');
             const totalHarga = document.getElementById('total-harga');
-            const submitBtn = document.getElementById('submit-btn');
-            
-            const tipeTrans = "{{ request('tipe', 'masuk') }}";
-            
+
             function updateStokTersedia() {
-                if (tipeTrans === 'keluar') {
-                    const selectedOption = barangSelect.options[barangSelect.selectedIndex];
-                    const stokDisplay = document.getElementById('stok-tersedia');
-                    
-                    if (selectedOption && selectedOption.value) {
-                        const stokSekarang = selectedOption.getAttribute('data-stok');
-                        stokDisplay.textContent = stokSekarang;
-                    } else {
-                        stokDisplay.textContent = '0';
-                    }
+                const selectedOption = barangSelect.options[barangSelect.selectedIndex];
+                const stokDisplay = document.getElementById('stok-tersedia');
+
+                if (selectedOption && selectedOption.value) {
+                    const stokSekarang = selectedOption.getAttribute('data-stok');
+                    stokDisplay.textContent = stokSekarang;
+                } else {
+                    stokDisplay.textContent = '0';
                 }
             }
-            
+
             function updateHargaOtomatis() {
                 const selectedOption = barangSelect.options[barangSelect.selectedIndex];
                 if (!selectedOption) return;
 
-                const hargaBeli = parseFloat(selectedOption.getAttribute('data-harga-beli')) || 0;
                 const hargaJual = parseFloat(selectedOption.getAttribute('data-harga-jual')) || 0;
 
-                const harga = tipeTrans === 'masuk' ? hargaBeli : hargaJual;
-
-                document.getElementById('harga-display').textContent = new Intl.NumberFormat('id-ID').format(harga);
-                hargaInput.value = harga;
+                document.getElementById('harga-display').textContent = new Intl.NumberFormat('id-ID').format(hargaJual);
+                hargaInput.value = hargaJual;
 
                 updateTotalHarga();
             }
@@ -141,44 +129,40 @@
                 const jumlah = parseInt(jumlahInput.value) || 0;
                 const harga = parseFloat(hargaInput.value) || 0;
                 const total = jumlah * harga;
-                
+
                 totalHarga.textContent = new Intl.NumberFormat('id-ID').format(total);
             }
-            
+
             function validateStokKeluar() {
-                if (tipeTrans === 'keluar') {
-                    const selectedOption = barangSelect.options[barangSelect.selectedIndex];
-                    if (selectedOption && selectedOption.value) {
-                        const stokSekarang = parseInt(selectedOption.getAttribute('data-stok')) || 0;
-                        const jumlah = parseInt(jumlahInput.value) || 0;
-                        
-                        if (jumlah > stokSekarang) {
-                            alert('Jumlah melebihi stok yang tersedia!');
-                            return false;
-                        }
+                const selectedOption = barangSelect.options[barangSelect.selectedIndex];
+                if (selectedOption && selectedOption.value) {
+                    const stokSekarang = parseInt(selectedOption.getAttribute('data-stok')) || 0;
+                    const jumlah = parseInt(jumlahInput.value) || 0;
+
+                    if (jumlah > stokSekarang) {
+                        alert('Jumlah melebihi stok yang tersedia!');
+                        return false;
                     }
                 }
                 return true;
             }
-            
+
             barangSelect.addEventListener('change', function () {
                 updateStokTersedia();
                 updateHargaOtomatis();
             });
             jumlahInput.addEventListener('input', updateTotalHarga);
-            hargaInput.addEventListener('input', updateTotalHarga);
-            
+
             const form = document.querySelector('form');
-            form.addEventListener('submit', function(event) {
+            form.addEventListener('submit', function (event) {
                 if (!validateStokKeluar()) {
                     event.preventDefault();
                 }
             });
-            
-            // Initialize
+
             updateStokTersedia();
             updateHargaOtomatis();
             updateTotalHarga();
         });
     </script>
-</x-admin-app-layout>
+</x-app-layout>

@@ -4,7 +4,7 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ __('Daftar Barang') }}
             </h2>
-            <a href="{{ route('barang.create') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 active:bg-blue-900 focus:outline-none focus:border-blue-900 focus:ring ring-blue-300 disabled:opacity-25 transition ease-in-out duration-150">
+            <a href="{{ route('admin.barang.create') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 active:bg-blue-900 focus:outline-none focus:border-blue-900 focus:ring ring-blue-300 disabled:opacity-25 transition ease-in-out duration-150">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                 </svg>
@@ -51,7 +51,7 @@
                                         <td class="py-3 px-4">{{ $index + 1 }}</td>
                                         <td class="py-3 px-4">{{ $barang->kode_barang }}</td>
                                         <td class="py-3 px-4">{{ $barang->nama_barang }}</td>
-                                        <td class="py-3 px-4">{{ $barang->kategori->nama ?? '-' }}</td>
+                                        <td class="py-3 px-4">{{ $barang->kategori->nama_kategori }}</td>
                                         <td class="py-3 px-4 text-right">
                                             <span class="{{ $barang->stok_sekarang <= $barang->stok_minimum ? 'text-red-600 font-bold' : '' }}">
                                                 {{ number_format($barang->stok_sekarang) }}
