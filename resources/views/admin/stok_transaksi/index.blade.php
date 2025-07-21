@@ -60,7 +60,7 @@
                                         <td class="py-3 px-4">{{ $index + 1 }}</td>
                                         <td class="py-3 px-4">{{ date('d-m-Y', strtotime($transaksi->tanggal_transaksi)) }}</td>
                                         <td>{{ class_basename($transaksi->creator_type) }}: {{ $transaksi->creator->name ?? '-' }}</td>
-                                        <td class="py-3 px-4">{{ $transaksi->barang->nama }}</td>
+                                        <td class="py-3 px-4">{{ $transaksi->barang->nama_barang }}</td>
                                         <td class="py-3 px-4">
                                             @if ($transaksi->tipe == 'masuk')
                                                 <span class="bg-green-100 text-green-800 text-xs font-medium px-2 py-0.5 rounded">Masuk</span>
