@@ -1,7 +1,8 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\StokTransaksiController; 
+use App\Http\Controllers\StokTransaksiController;
+use App\Http\Controllers\BarangController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -22,6 +23,7 @@ Route::middleware('auth')->group(function () {
     Route::post('stok-transaksi', [StokTransaksiController::class, 'store'])->name('stok-transaksi.store');
     Route::get('stok-transaksi/{stokTransaksi}', [StokTransaksiController::class, 'show'])->name('stok-transaksi.show');
 
+    Route::get('/dashboard', [BarangController::class, 'dashboard'])->name('dashboard');
 });
 
 require __DIR__.'/auth.php';

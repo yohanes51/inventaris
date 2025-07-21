@@ -70,7 +70,13 @@
                             Admin Log in
                         </a>
 
-                        
+                        @if (Route::has('admin.register'))
+                            <a
+                                href="{{ route('admin.register') }}"
+                                class="px-5 py-2 text-white bg-slate-800 hover:bg-slate-700 border border-slate-700 hover:border-slate-600 rounded-lg transition-all duration-200 shadow-lg">
+                                Admin Register
+                            </a>
+                        @endif
                     @endauth
                 </nav>
             @endif

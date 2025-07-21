@@ -47,4 +47,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    public function stokTransaksis()
+    {
+        return $this->morphMany(StokTransaksi::class, 'creator');
+    }
+
 }

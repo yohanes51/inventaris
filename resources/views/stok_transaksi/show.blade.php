@@ -1,8 +1,8 @@
-<x-admin-app-layout>
+<x-app-layout>
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Detail Transaksi Stok') }}
+                {{ __('Detail Stok Keluar') }}
             </h2>
             <a href="{{ route('stok-transaksi.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest hover:bg-gray-300 active:bg-gray-400 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">
                 Kembali
@@ -15,21 +15,8 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
                     <div class="mb-6">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <h1 class="text-2xl font-bold">
-                                    {{ $stokTransaksi->tipe == 'masuk' ? 'Stok Masuk' : 'Stok Keluar' }}
-                                </h1>
-                                <p class="text-gray-600">
-                                    ID Transaksi: #{{ $stokTransaksi->id }}
-                                </p>
-                            </div>
-                            <div class="text-right">
-                                <span class="{{ $stokTransaksi->tipe == 'masuk' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }} text-sm font-medium px-3 py-1 rounded-full">
-                                    {{ $stokTransaksi->tipe == 'masuk' ? 'Masuk' : 'Keluar' }}
-                                </span>
-                            </div>
-                        </div>
+                        <h1 class="text-2xl font-bold">Stok Keluar</h1>
+                        <p class="text-gray-600">ID Transaksi: #{{ $stokTransaksi->id }}</p>
                     </div>
 
                     <div class="bg-gray-50 p-4 rounded-lg mb-6">
@@ -74,16 +61,12 @@
                         <div class="bg-gray-50 p-4 rounded">
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                    <p class="text-sm text-gray-600">Nama Barang</p>
-                                    <p class="font-medium">{{ $stokTransaksi->barang->nama }}</p>
-                                </div>
-                                <div>
                                     <p class="text-sm text-gray-600">Kode Barang</p>
-                                    <p class="font-medium">{{ $stokTransaksi->barang->kode ?? '-' }}</p>
+                                    <p class="font-medium">{{ $stokTransaksi->barang->kode }}</p>
                                 </div>
                                 <div>
                                     <p class="text-sm text-gray-600">Kategori</p>
-                                    <p class="font-medium">{{ $stokTransaksi->barang->kategori->nama ?? '-' }}</p>
+                                    <p class="font-medium">{{ $stokTransaksi->barang->kategori->nama }}</p>
                                 </div>
                                 <div>
                                     <p class="text-sm text-gray-600">Stok Saat Ini</p>
@@ -93,7 +76,7 @@
                         </div>
                     </div>
 
-                    <div class="mt-6 flex justify-between">
+                    <div class="mt-6">
                         <a href="{{ route('stok-transaksi.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-200 border border-transparent rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest hover:bg-gray-300 active:bg-gray-400 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">
                             Kembali ke Daftar
                         </a>
@@ -102,4 +85,4 @@
             </div>
         </div>
     </div>
-</x-admin-app-layout>
+</x-app-layout>
