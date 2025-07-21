@@ -74,7 +74,15 @@
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100">
-                                @forelse(\App\Models\StokTransaksi::with('barang')->latest()->limit(5)->get() as $transaksi)
+                                @forelse (
+                                    \App\Models\StokTransaksi::with('barang')
+                                        ->where('tipe', 'keluar')
+                                        ->where('creator_id', auth()->id())
+                                        ->where('creator_type', \App\Models\User::class)
+                                        ->latest()
+                                        ->limit(5)
+                                        ->get() as $transaksi
+                                )                                
                                     <tr class="hover:bg-gray-50 transition">
                                         <td class="py-2 px-4">{{ date('d/m/Y', strtotime($transaksi->tanggal_transaksi)) }}</td>
                                         <td class="py-2 px-4">{{ $transaksi->barang->nama_barang }}</td>

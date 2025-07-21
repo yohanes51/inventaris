@@ -10,6 +10,7 @@ return new class extends Migration
     {
         Schema::create('stok_transaksis', function (Blueprint $table) {
             $table->id();
+            $table->morphs('creator'); 
             $table->foreignId('barang_id')->constrained('barangs');
             $table->enum('tipe', ['masuk', 'keluar']);
             $table->integer('jumlah');

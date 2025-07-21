@@ -18,4 +18,9 @@ class StokTransaksi extends Model
     {
         return $this->belongsTo(Barang::class);
     }
+
+    public function creator()
+    {
+        return $this->morphTo();
+    }
 }

@@ -12,9 +12,13 @@ class StokTransaksiController extends Controller
 {
     public function index()
     {
-        // Hanya menampilkan transaksi keluar
-        $transaksis = StokTransaksi::with('barang')
+        $user = auth('web')->user(); // guard default untuk users
+
+        // Hanya transaksi keluar milik user ini
+        $transaksis = StokTransaksi::with(['barang', 'creator'])
             ->where('tipe', 'keluar')
+            ->where('creator_id', $user->id)
+            ->where('creator_type', \App\Models\User::class)
             ->orderBy('tanggal_transaksi', 'desc')
             ->get();
 
@@ -48,15 +52,20 @@ class StokTransaksiController extends Controller
             $harga = $barang->harga_jual;
             $total = $harga * $request->jumlah;
 
+            $user = auth('web')->user();
+
             $transaksi = new StokTransaksi([
                 'barang_id' => $barang->id,
-                'tipe' => 'keluar', // Tetap dan tidak bisa diubah
+                'tipe' => 'keluar',
                 'jumlah' => $request->jumlah,
                 'tanggal_transaksi' => $request->tanggal_transaksi,
                 'keterangan' => $request->keterangan,
                 'harga' => $harga,
                 'total' => $total,
             ]);
+
+            // Catat user sebagai creator
+            $transaksi->creator()->associate($user);
             $transaksi->save();
 
             // Kurangi stok
@@ -78,8 +87,14 @@ class StokTransaksiController extends Controller
 
     public function show(StokTransaksi $stokTransaksi)
     {
-        // Batasi hanya transaksi keluar yang bisa dilihat user
-        if ($stokTransaksi->tipe !== 'keluar') {
+        $user = auth('web')->user();
+
+        // Batasi hanya transaksi keluar milik user ini
+        if (
+            $stokTransaksi->tipe !== 'keluar' ||
+            $stokTransaksi->creator_id !== $user->id ||
+            $stokTransaksi->creator_type !== \App\Models\User::class
+        ) {
             abort(403, 'Akses ditolak.');
         }
 
@@ -88,7 +103,6 @@ class StokTransaksiController extends Controller
 
     public function destroy(StokTransaksi $stokTransaksi)
     {
-        // User tidak bisa menghapus transaksi
         return redirect()->route('stok-transaksi.index')
             ->with('error', 'Penghapusan transaksi tidak diizinkan');
     }

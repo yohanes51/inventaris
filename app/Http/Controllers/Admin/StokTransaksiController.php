@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Barang;
 use App\Models\StokTransaksi;
 use Illuminate\Http\Request;
@@ -11,7 +12,11 @@ class StokTransaksiController extends Controller
 {
     public function index()
     {
-        $transaksis = StokTransaksi::with('barang')->orderBy('tanggal_transaksi', 'desc')->get();
+        // Admin: lihat semua
+        $transaksis = StokTransaksi::with(['barang', 'creator'])
+            ->orderBy('tanggal_transaksi', 'desc')
+            ->get();
+
         return view('admin.stok_transaksi.index', compact('transaksis'));
     }
 
@@ -35,11 +40,13 @@ class StokTransaksiController extends Controller
         try {
             $barang = Barang::findOrFail($request->barang_id);
 
-            // Ambil harga otomatis berdasarkan tipe
             $harga = $request->tipe == 'masuk' ? $barang->harga_beli : $barang->harga_jual;
             $total = $harga * $request->jumlah;
 
-            // Buat transaksi
+            // Ambil siapa yang login (admin)
+            $admin = auth('admin')->user();
+
+            // Simpan transaksi
             $transaksi = new StokTransaksi([
                 'barang_id' => $barang->id,
                 'tipe' => $request->tipe,
@@ -49,6 +56,9 @@ class StokTransaksiController extends Controller
                 'harga' => $harga,
                 'total' => $total,
             ]);
+
+            // Isi polymorphic creator
+            $transaksi->creator()->associate($admin);
             $transaksi->save();
 
             // Update stok
@@ -67,7 +77,7 @@ class StokTransaksiController extends Controller
                 ->with('success', 'Transaksi stok berhasil dicatat');
 
         } catch (\Exception $e) {
-            DB::rollback();
+            DB::rollBack();
             return redirect()->back()
                 ->with('error', $e->getMessage())
                 ->withInput();
@@ -81,8 +91,6 @@ class StokTransaksiController extends Controller
 
     public function destroy(StokTransaksi $stokTransaksi)
     {
-        // Tidak direkomendasikan menghapus transaksi stok
-        // Jika ingin menghapus, harus dikembalikan juga stok barangnya
         return redirect()->route('admin.stok-transaksi.index')
             ->with('error', 'Penghapusan transaksi stok tidak diizinkan');
     }
