@@ -75,7 +75,7 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
                                     <p class="text-sm text-gray-600">Nama Barang</p>
-                                    <p class="font-medium">{{ $stokTransaksi->barang->nama }}</p>
+                                    <p class="font-medium">{{ $stokTransaksi->barang->nama.barang}}</p>
                                 </div>
                                 <div>
                                     <p class="text-sm text-gray-600">Kode Barang</p>
@@ -83,7 +83,7 @@
                                 </div>
                                 <div>
                                     <p class="text-sm text-gray-600">Kategori</p>
-                                    <p class="font-medium">{{ $stokTransaksi->barang->kategori->nama ?? '-' }}</p>
+                                    <p class="font-medium">{{ $stokTransaksi->barang->kategori->nama.barang ?? '-' }}</p>
                                 </div>
                                 <div>
                                     <p class="text-sm text-gray-600">Stok Saat Ini</p>
