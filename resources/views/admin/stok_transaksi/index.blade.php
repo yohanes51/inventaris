@@ -87,6 +87,12 @@
                                     </tr>
                                 @endforelse
                             </tbody>
+                            <!-- Bagian Total Omset -->
+                            <div class="mt-4 text-right">
+                                <h3 class="text-lg font-semibold">Total Omset: 
+                                    <span class="text-green-600">Rp {{ number_format($totalOmset, 0, ',', '.') }}</span>
+                                </h3>
+                            </div>
                         </table>
                     </div>
                 </div>

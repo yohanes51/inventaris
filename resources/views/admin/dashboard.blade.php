@@ -194,6 +194,7 @@
                                             <th class="py-2 px-4 border-b text-center">Tipe</th>
                                             <th class="py-2 px-4 border-b text-right">Jumlah</th>
                                             <th class="py-2 px-4 border-b text-right">Total</th>
+                                            
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -296,5 +297,6 @@
                 </div>
             </div>
         </div>
+        
     </div>
 </x-admin-app-layout>

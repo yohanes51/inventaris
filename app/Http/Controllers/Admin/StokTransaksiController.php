@@ -12,12 +12,16 @@ class StokTransaksiController extends Controller
 {
     public function index()
     {
-        // Admin: lihat semua
+        // Ambil semua transaksi dengan relasi barang & creator
         $transaksis = StokTransaksi::with(['barang', 'creator'])
             ->orderBy('tanggal_transaksi', 'desc')
             ->get();
 
-        return view('admin.stok_transaksi.index', compact('transaksis'));
+        // Hitung total omset hanya dari transaksi bertipe 'keluar'
+        $totalOmset = StokTransaksi::where('tipe', 'keluar')->sum('total');
+
+        // Kirim data ke view
+        return view('admin.stok_transaksi.index', compact('transaksis', 'totalOmset'));
     }
 
     public function create()
